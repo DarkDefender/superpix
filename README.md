@@ -20,6 +20,8 @@ Deps:
 
 - Eigen
 
+- nanosvg (included as a git submodule)
+
 Usage:
 ------
 `./super_pix <path_to_svg_file> <path_to_png_output_file>`
