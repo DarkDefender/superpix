@@ -1,3 +1,6 @@
+Super Pix
+=====
+
 A minimal port of SuperPixelator to Cpp:
 https://bitbucket.org/piffany/superpixelator
 
@@ -9,13 +12,24 @@ shapes are currently not supported. But it should be relatively easy to add
 those as well by porting the missing parts from the original Java library.
 
 Deps:
+-----
 
-CMake
+- CMake
 
-libpng
+- libpng
 
-Eigen
+- Eigen
 
 Usage:
-
+------
 `./super_pix <path_to_svg_file> <path_to_png_output_file>`
+
+Building:
+------
+
+```
+mkdir build
+cd build
+cmake ../
+make
+```
