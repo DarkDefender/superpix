@@ -7,6 +7,6 @@
 
 using namespace std;
 
-int test_png(const char *png_file, vector<vector<my_point>> point_vec);
+int test_png(const char *png_file, vector<vector<my_point>> point_vec, int w, int h);
 
 #endif

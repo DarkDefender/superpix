@@ -42,8 +42,10 @@ void debug_print_paths(string svg_file){
 	nsvgDelete(image);
 }
 
-vector<Path> read_svg_paths(const char *svg_file){
+vector<Path> read_svg_paths(const char *svg_file, int &w, int &h){
 	vector<Path> read_paths;
+
+	bool poly_path = true;
 
 	// Load
 	struct NSVGimage* image;
@@ -61,12 +63,20 @@ vector<Path> read_svg_paths(const char *svg_file){
                 p2.x = p[4]; p2.y = p[5];
                 p3.x = p[6]; p3.y = p[7];
 
-				Curve cur{p0,p1,p2,p3};
-				new_path.add_curve(cur);
+				if(poly_path) {
+					Curve cur{p0,p0,p3,p3};
+					new_path.add_curve(cur);
+				} else {
+					Curve cur{p0,p1,p2,p3};
+					new_path.add_curve(cur);
+				}
 			}
 			read_paths.push_back(new_path);
 		}
 	}
+
+	w = image->width;
+	h = image->height;
 
 	// Delete
 	nsvgDelete(image);
@@ -85,8 +95,9 @@ int main(int argc, const char * argv[]){
 
 	vector<Path> paths;
     vector<vector<my_point>> points;
+    int w,h;
 
-    paths = read_svg_paths(argv[1]);
+    paths = read_svg_paths(argv[1], w, h);
 	//cout << "path vec:\n";
 	//cout << paths.size() << endl;
 	//cout << paths[0].get_num_segments() << endl;
@@ -103,7 +114,7 @@ int main(int argc, const char * argv[]){
 	//	cout << p << endl;
 	//}
 
-	test_png(argv[2], points);
+	test_png(argv[2], points, w, h);
 
 	return 0;
 }

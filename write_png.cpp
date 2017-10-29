@@ -140,7 +140,7 @@ static int pix(int value, int max)
 	return (int) (256.0 *((double) (value)/(double) max));
 }
 
-int test_png(const char *png_file, vector<vector<my_point>> point_vec)
+int test_png(const char *png_file, vector<vector<my_point>> point_vec, int w, int h)
 {
 	bitmap_t fruit;
 	size_t x;
@@ -148,8 +148,8 @@ int test_png(const char *png_file, vector<vector<my_point>> point_vec)
 
 	/* Create an image. */
 
-	fruit.width = 100;
-	fruit.height = 100;
+	fruit.width = w;
+	fruit.height = h;
 
 	fruit.pixels = (pixel_t *) calloc (fruit.width * fruit.height, sizeof (pixel_t));
 
