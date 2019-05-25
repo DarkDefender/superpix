@@ -90,7 +90,6 @@ vector<my_point> convert_path_to_pixels(vector<my_point> corners){
 }
 
 vector<my_point> get_pixelated_path_wrt_center(Path path, bool shifted, bool sorted, my_point center){
-	//TODO this spltting deforms the non poly lines too much.
 	vector<Path> step1 = split_by_monotonicity(path);
 
 	//vector<my_point> pixels_trans;
