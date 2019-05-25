@@ -31,7 +31,7 @@ typedef struct  {
 
 static pixel_t* pixel_at(bitmap_t *bitmap, size_t x, size_t y)
 {
-	if (bitmap->width < y || bitmap->height < x) {
+	if (bitmap->width < x || bitmap->height < y) {
 		//Out of bounds
 		return NULL;
 	}
