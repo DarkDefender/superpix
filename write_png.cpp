@@ -29,8 +29,12 @@ typedef struct  {
 /* Given "bitmap", this returns the pixel of bitmap at the point
    ("x", "y"). */
 
-static pixel_t * pixel_at(bitmap_t * bitmap, int x, int y)
+static pixel_t* pixel_at(bitmap_t *bitmap, int x, int y)
 {
+	if (bitmap->width < y || bitmap->height < x) {
+		//Out of bounds
+		return NULL;
+	}
 	return bitmap->pixels + bitmap->width * y + x;
 }
 
@@ -39,11 +43,11 @@ static pixel_t * pixel_at(bitmap_t * bitmap, int x, int y)
 
 static int save_png_to_file(bitmap_t *bitmap, const char *path)
 {
-	FILE * fp;
+	FILE *fp;
 	png_structp png_ptr = NULL;
 	png_infop info_ptr = NULL;
 	size_t x, y;
-	png_byte ** row_pointers = NULL;
+	png_byte **row_pointers = NULL;
 	/* "status" contains the return value of this function. At first
 	   it is set to a value which means 'failure'. When the routine
 	   has finished its work, it is set to a value which means
@@ -55,24 +59,24 @@ static int save_png_to_file(bitmap_t *bitmap, const char *path)
 	int pixel_size = 3;
 	int depth = 8;
 
-	fp = fopen (path, "wb");
+	fp = fopen(path, "wb");
 	if (! fp) {
 		goto fopen_failed;
 	}
 
-	png_ptr = png_create_write_struct (PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
+	png_ptr = png_create_write_struct(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
 	if (png_ptr == NULL) {
 		goto png_create_write_struct_failed;
 	}
 
-	info_ptr = png_create_info_struct (png_ptr);
+	info_ptr = png_create_info_struct(png_ptr);
 	if (info_ptr == NULL) {
 		goto png_create_info_struct_failed;
 	}
 
 	/* Set up error handling. */
 
-	if (setjmp (png_jmpbuf (png_ptr))) {
+	if (setjmp(png_jmpbuf(png_ptr))) {
 		goto png_failure;
 	}
 
@@ -90,13 +94,13 @@ static int save_png_to_file(bitmap_t *bitmap, const char *path)
 
 	/* Initialize rows of PNG. */
 
-	row_pointers = (png_byte **) png_malloc (png_ptr, bitmap->height * sizeof (png_byte *));
+	row_pointers = (png_byte**) png_malloc(png_ptr, bitmap->height * sizeof(png_byte*));
 	for (y = 0; y < bitmap->height; y++) {
 		png_byte *row =
-			(png_byte *) png_malloc (png_ptr, sizeof (uint8_t) * bitmap->width * pixel_size);
+			(png_byte*) png_malloc(png_ptr, sizeof(uint8_t) * bitmap->width * pixel_size);
 		row_pointers[y] = row;
 		for (x = 0; x < bitmap->width; x++) {
-			pixel_t * pixel = pixel_at (bitmap, x, y);
+			pixel_t* pixel = pixel_at (bitmap, x, y);
 			*row++ = pixel->red;
 			*row++ = pixel->green;
 			*row++ = pixel->blue;
@@ -105,9 +109,9 @@ static int save_png_to_file(bitmap_t *bitmap, const char *path)
 
 	/* Write the image data to "fp". */
 
-	png_init_io (png_ptr, fp);
-	png_set_rows (png_ptr, info_ptr, row_pointers);
-	png_write_png (png_ptr, info_ptr, PNG_TRANSFORM_IDENTITY, NULL);
+	png_init_io(png_ptr, fp);
+	png_set_rows(png_ptr, info_ptr, row_pointers);
+	png_write_png(png_ptr, info_ptr, PNG_TRANSFORM_IDENTITY, NULL);
 
 	/* The routine has successfully written the file, so we set
 	   "status" to a value which indicates success. */
@@ -115,15 +119,15 @@ static int save_png_to_file(bitmap_t *bitmap, const char *path)
 	status = 0;
 
 	for (y = 0; y < bitmap->height; y++) {
-		png_free (png_ptr, row_pointers[y]);
+		png_free(png_ptr, row_pointers[y]);
 	}
-	png_free (png_ptr, row_pointers);
+	png_free(png_ptr, row_pointers);
 
 png_failure:
 png_create_info_struct_failed:
-	png_destroy_write_struct (&png_ptr, &info_ptr);
+	png_destroy_write_struct(&png_ptr, &info_ptr);
 png_create_write_struct_failed:
-	fclose (fp);
+	fclose(fp);
 fopen_failed:
 	return status;
 }
@@ -142,34 +146,34 @@ static int pix(int value, int max)
 
 int test_png(const char *png_file, vector<vector<my_point>> point_vec, int w, int h)
 {
-	bitmap_t fruit;
+	bitmap_t image;
 	size_t x;
 	size_t y;
 
 	/* Create an image. */
 
-	fruit.width = w;
-	fruit.height = h;
+	image.width = w;
+	image.height = h;
 
-	fruit.pixels = (pixel_t *) calloc (fruit.width * fruit.height, sizeof (pixel_t));
+	image.pixels = (pixel_t*) calloc(image.width * image.height, sizeof(pixel_t));
 
-	if (! fruit.pixels) {
+	if (! image.pixels) {
 		return -1;
 	}
 
     /*
-	for (y = 0; y < fruit.height; y++) {
-		for (x = 0; x < fruit.width; x++) {
-			pixel_t * pixel = pixel_at (& fruit, x, y);
-			pixel->red = pix (x, fruit.width);
-			pixel->green = pix (y, fruit.height);
+	for (y = 0; y < image.height; y++) {
+		for (x = 0; x < image.width; x++) {
+			pixel_t *pixel = pixel_at(&image, x, y);
+			pixel->red = pix (x, image.width);
+			pixel->green = pix (y, image.height);
 		}
 	}
 	*/
 
-	for (y = 0; y < fruit.height; y++) {
-		for (x = 0; x < fruit.width; x++) {
-			pixel_t * pixel = pixel_at (& fruit, x, y);
+	for (y = 0; y < image.height; y++) {
+		for (x = 0; x < image.width; x++) {
+			pixel_t *pixel = pixel_at(&image, x, y);
 			pixel->red = 255;
 			pixel->green = 255;
 			pixel->blue = 255;
@@ -178,17 +182,21 @@ int test_png(const char *png_file, vector<vector<my_point>> point_vec, int w, in
 
 	for (auto vec : point_vec){
 		for (auto p : vec){
-			pixel_t * pixel = pixel_at (& fruit, (int)p.x, (int)p.y);
+			pixel_t *pixel = pixel_at(&image, (int)p.x, (int)p.y);
+			if (pixel == NULL) {
+				//Out of bounds
+				continue;
+			}
 			pixel->red = 0;
 			pixel->green = 0;
 			pixel->blue = 0;
 		}
 	}
-	/* Write the image to a file 'fruit.png'. */
+	/* Write the image to a file 'image.png'. */
 
-	save_png_to_file (& fruit, png_file);
+	save_png_to_file(&image, png_file);
 
-	free (fruit.pixels);
+	free(image.pixels);
 
 	return 0;
 }
