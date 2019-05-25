@@ -45,23 +45,29 @@ void debug_print_paths(string svg_file){
 vector<Path> read_svg_paths(const char *svg_file, int &w, int &h){
 	vector<Path> read_paths;
 
-	bool poly_path = true;
+	bool poly_path = false;
 
 	// Load
 	struct NSVGimage* image;
 	image = nsvgParseFromFile(svg_file, "px", 96);
 	cout << "Reading: " << svg_file << endl;
+
+	if (image == NULL) {
+		cout << "Couldn't open: " << svg_file << endl;
+		return read_paths;
+	}
+
 	// Use...
 	for (auto shape = image->shapes; shape != NULL; shape = shape->next) {
 		for (auto path = shape->paths; path != NULL; path = path->next) {
 			Path new_path;
 			for (int i = 0; i < path->npts-1; i += 3) {
 				float* p = &path->pts[i*2];
-                my_point p0, p1, p2, p3;
-                p0.x = p[0]; p0.y = p[1];
-                p1.x = p[2]; p1.y = p[3];
-                p2.x = p[4]; p2.y = p[5];
-                p3.x = p[6]; p3.y = p[7];
+				my_point p0, p1, p2, p3;
+				p0.x = p[0]; p0.y = p[1];
+				p1.x = p[2]; p1.y = p[3];
+				p2.x = p[4]; p2.y = p[5];
+				p3.x = p[6]; p3.y = p[7];
 
 				if(poly_path) {
 					Curve cur{p0,p0,p3,p3};
@@ -98,6 +104,12 @@ int main(int argc, const char * argv[]){
     int w,h;
 
     paths = read_svg_paths(argv[1], w, h);
+
+	if (paths.size() == 0) {
+		cout << "No paths read! Exiting..." << endl;
+		return 0;
+	}
+
 	//cout << "path vec:\n";
 	//cout << paths.size() << endl;
 	//cout << paths[0].get_num_segments() << endl;
