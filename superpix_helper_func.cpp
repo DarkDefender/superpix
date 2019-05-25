@@ -109,7 +109,6 @@ vector<my_point> get_pixelated_path_wrt_center(Path path, bool shifted, bool sor
 		cout << "Step2 empty\n";
 	}
 
-	//TODO non poly lines gets mangeled here... why?
 	vector<my_point> step3 = get_pixelated_path_WRT_center(step2, sorted, center);
 
 	if (step3.empty()) {

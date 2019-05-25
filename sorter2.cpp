@@ -144,7 +144,7 @@ double get_ordering_cost_WRT_segment(vector<my_point> points, size_t k, int sort
 }
 
 // return true if shifted
-bool try_shifting_point(vector<my_point> points, int i, int dx, int dy,
+bool try_shifting_point(vector<my_point> &points, int i, int dx, int dy,
 		vector<my_point> samples, int sortDir) {
 	my_point p1 = points.at(i-1);
 	my_point p2 = points.at(i);
@@ -196,7 +196,7 @@ bool try_shifting_point(vector<my_point> points, int i, int dx, int dy,
 	return shifted;
 }
 
-bool try_splitting_point(vector<my_point> points, int i, int dx, int dy,
+bool try_splitting_point(vector<my_point> &points, int i, int dx, int dy,
 		vector<my_point> samples, int sortDir) {
 	my_point p1 = points.at(i-1);
 	my_point p2 = points.at(i);
@@ -273,7 +273,7 @@ bool try_splitting_point(vector<my_point> points, int i, int dx, int dy,
 }
 
 // merge i and i+1
-bool try_merging_points(vector<my_point> points, size_t i, int dx, int dy,
+bool try_merging_points(vector<my_point> &points, size_t i, int dx, int dy,
 		vector<my_point> samples, int sortDir) {
 	if (i+2 >= points.size()){
 		return false;

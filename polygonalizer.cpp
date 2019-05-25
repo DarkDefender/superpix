@@ -342,6 +342,7 @@ vector<my_point> get_pixelated_path_WRT_center(Path path, bool toSort, my_point 
 		vector<bool> sorted = {true};
 		vector<my_point> sortedPixelPath = sort_path_points(
 				reverse ? path.get_reverse_path() : path, pixelPath, sorted);
+
 		if(reverse){
 			sortedPixelPath = reverse_vector(sortedPixelPath);
 		}

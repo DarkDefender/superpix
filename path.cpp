@@ -68,26 +68,28 @@ Curve Path::get_curve(size_t i) const{
 }
 
 bool Path::is_valid_seg_idx(size_t i){
-	return (i==0 && !is_closed());
+	return i < segments.size();
 }
 
 Curve Path::get_curve_before_seg_idx(size_t i){
-	if (is_valid_seg_idx(i)){
+	if (i==0 && !is_closed()){
 		//TODO see if we have to fix up other stuff now that we do not return null
 		//return null;
 		assert(false);
 	}
+	//TODO fix wrap around
 	int curveInd = (i==0) ? segments.size()-2 : i-1;
 	Curve curveBefore = get_curve(curveInd);
 	return curveBefore;
 }
 
 Curve Path::get_curve_after_seg_idx(size_t i){
-	if(is_valid_seg_idx(i)){
+	if (i==0 && !is_closed()){
 		//TODO see if we have to fix up other stuff now that we do not return null
 		//return null;
 		assert(false);
 	}
+	//TODO fix wrap around
 	int curveInd = (i==segments.size()-1) ? 0 : i;
 	Curve curveBefore = get_curve(curveInd);
 	return curveBefore;
