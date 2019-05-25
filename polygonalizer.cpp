@@ -16,13 +16,12 @@
 using namespace std;
 
 vector<my_point> reverse_vector(vector<my_point> points) {
-		vector<my_point> reverse;
-		for(int i = points.size()-1; i >= 0; i--) {
-			reverse.push_back(points.at(i));
-		}
-		return reverse;
+	vector<my_point> reverse;
+	for(int i = points.size()-1; i >= 0; i--) {
+		reverse.push_back(points.at(i));
 	}
-
+	return reverse;
+}
 
 bool is_half(double v) {
 	return abs( abs(fmod(v,1)) - 0.5 ) < 0.01;
@@ -370,10 +369,14 @@ vector<my_point> get_pixelated_path_WRT_center(vector<Path> paths, bool sorted, 
 			Path path = paths.at(i);
 			// if length 0, don't do anything
 			if(path.get_first_point() == path.get_last_point()){
-				//cout << "Got lenght 0 in polygonalizer\n";
+				cout << "Got lenght 0 in polygonalizer\n";
 				continue;
 			}
+			//cout << i << endl;
+			//cout << path;
 			vector<my_point> new_pix = get_pixelated_path_WRT_center(paths.at(i), sorted, center);
+			//cout << new_pix;
+
 			shapePixels.insert(shapePixels.end(), new_pix.begin(), new_pix.end());
 		}
 		return shapePixels;

@@ -110,11 +110,11 @@ ostream& operator <<(ostream &o, const my_point &p){
 	return o;
 }
 
-ostream& operator <<(ostream &o, vector<double> vec_d){
+ostream& operator <<(ostream &o, const vector<my_point> vec){
 	o << "[";
-	for (size_t i = 0; i < vec_d.size() -1; i++){
-		o << vec_d[i] << ", ";
+	for (size_t i = 0; i < vec.size() -1; i++){
+		o << vec[i] << ", ";
 	}
-	o << vec_d.back() << "]" << endl;
+	o << vec.back() << "]" << endl;
 	return o;
 }

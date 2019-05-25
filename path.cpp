@@ -3,6 +3,7 @@
 #include <math.h>
 #include <algorithm>
 #include <cassert>
+#include <iomanip>
 
 Path::Path(){
 
@@ -37,11 +38,11 @@ void Path::transform(Transform<double,2,Affine> at) {
 	}
 }
 
-size_t Path::get_num_segments(){
+size_t Path::get_num_segments() const{
 	return segments.size();
 }
 
-size_t Path::get_num_curves(){
+size_t Path::get_num_curves() const{
 	return max(0, (int)segments.size()-1);
 }
 
@@ -51,7 +52,7 @@ Path Path::get_reverse_path(){
 	return Path{rev_vec};
 }
 
-Curve Path::get_curve(int i) {
+Curve Path::get_curve(int i) const{
 	// Is the curve index valid?
 	assert(i >= 0 && i < get_num_curves());
 
@@ -91,7 +92,7 @@ Curve Path::get_curve_after_seg_idx(int i){
 	return curveBefore;
 }
 
-vector<Curve> Path::get_curves() {
+vector<Curve> Path::get_curves() const{
 	vector<Curve> myCurves;
 	for(size_t i=0; i < get_num_curves(); i++) {
 		myCurves.push_back(get_curve(i));
@@ -99,7 +100,7 @@ vector<Curve> Path::get_curves() {
 	return myCurves;
 }
 
-Segment Path::get_segment(int i){
+Segment Path::get_segment(int i) const{
 	return segments.at(i);
 }
 
@@ -230,8 +231,8 @@ bool Path::is_straight() {
 		//System.out.println(i + " : " + frameLength);
 	}
 	double straightDist = distance(get_first_point(), get_last_point());
-	//System.out.println(this);
-	//System.out.println(frameLength + ", " + straightDist);
+	//cout << *this;
+	//cout << frameLength << ", " << straightDist << endl;
 	return abs(straightDist-frameLength) < 0.001;
 }
 
@@ -284,15 +285,31 @@ void Path::remove_segment(int i) {
 	}
 }
 
-ostream& operator <<(ostream &o, Path &path){
+ostream& operator <<(ostream &o, const Path &path){
+	o << "Path:" << endl;
+	//Set number of printed decimals to 2
+	o << fixed << setprecision(2);
 	for( size_t i = 0; i < path.get_num_segments(); i++){
-		my_point p = path.get_segment(i).get_point();
-		o << p << endl;
+		o << "  ";
+		o << path.get_segment(i);
+		o << endl;
 	}
+	o << endl;
+
+	vector<Curve> curves = path.get_curves();
+	for(auto curve : curves){
+		o << "  Curve: ";
+		o << "p0: "<< curve.get_pN(0) << ", ";
+		o << "p1: "<< curve.get_pN(1) << ", ";
+		o << "p2: "<< curve.get_pN(2) << ", ";
+		o << "p3: "<< curve.get_pN(3) << ", ";
+		o << endl;
+	}
+
 	return o;
 }
 
-ostream& operator <<(ostream &o, vector<Path> &paths){
+ostream& operator <<(ostream &o, const vector<Path> &paths){
 	for (size_t i = 0; i < paths.size(); i++){
 		o << "Path No: " << i << endl;
 		o << paths[i];

@@ -35,6 +35,6 @@ my_point operator *(const my_point &a, const double &b);
 
 ostream& operator <<(ostream &o, const my_point &p);
 
-ostream& operator <<(ostream &o, vector<double> vec_d);
+ostream& operator <<(ostream &o, const vector<my_point> vec);
 
 #endif

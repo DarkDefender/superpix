@@ -31,17 +31,17 @@ class Path {
 		Path get_transformed_copy(Transform<double,2,Affine> at);
 		void transform(Transform<double,2,Affine> at);
 
-		size_t get_num_segments();
-		size_t get_num_curves();
+		size_t get_num_segments() const;
+		size_t get_num_curves() const;
 
 		Path get_reverse_path();
 
-		Curve get_curve(int i);
+		Curve get_curve(int i) const;
 		Curve get_curve_before_seg_idx(int i);
 		Curve get_curve_after_seg_idx(int i);
-		vector<Curve> get_curves();
+		vector<Curve> get_curves() const;
 
-		Segment get_segment(int i);
+		Segment get_segment(int i) const;
 		Segment get_first_segment();
 		Segment get_last_segment();
 
@@ -66,7 +66,7 @@ class Path {
 		void remove_segment(int i);
 };
 
-ostream& operator <<(ostream &o, Path &p);
-ostream& operator <<(ostream &o, vector<Path> &p);
+ostream& operator <<(ostream &o, const Path &p);
+ostream& operator <<(ostream &o, const vector<Path> &p);
 
 #endif

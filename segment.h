@@ -19,10 +19,11 @@ class Segment {
 		Segment(my_point point, my_point handle_in, my_point handle_out);
 
 		void update_horz_and_vert();
+		void get_horz_and_vert(bool &horz, bool &vert) const;
 
-		my_point get_point();
-		my_point get_handle_in();
-		my_point get_handle_out();
+		my_point get_point() const;
+		my_point get_handle_in() const;
+		my_point get_handle_out() const;
 
 		void set_point(my_point p);
 		void set_handle_in(my_point p);
@@ -31,13 +32,19 @@ class Segment {
 		void transform(Transform<double,2,Affine> at);
 };
 
+ostream& operator <<(ostream &o, const Segment &seg);
+ostream& operator <<(ostream &o, const vector<Segment> &segs);
+
 class FlaggedSegment: public Segment {
 		bool flag = false;
 	public:
 		FlaggedSegment();
 		FlaggedSegment(my_point point, my_point handle_in, my_point handle_out);
 		void set_flag(bool b);
-		bool get_flag();
+		bool get_flag() const;
 };
+
+ostream& operator <<(ostream &o, const FlaggedSegment &seg);
+ostream& operator <<(ostream &o, const vector<FlaggedSegment> &segs);
 
 #endif

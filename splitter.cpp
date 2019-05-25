@@ -59,15 +59,16 @@ vector<FlaggedSegment> split_curve_by_monotonicity(Curve curve0, bool with_min_m
 		splitTs.insert(splitTs.end(), inflectPts.begin(), inflectPts.end());
 	}
 	sort_and_remove_duplicates(splitTs);
+
 	// remove 0's and 1's. they will be tested later
-	if(!splitTs.empty()){
-		if(splitTs.at(0) == 0){
-			splitTs.erase(splitTs.begin());
-		}
-		if(splitTs.at(splitTs.size() - 1) == 1){
-			splitTs.pop_back();
-		}
+	if(!splitTs.empty() && splitTs.at(0) == 0){
+		splitTs.erase(splitTs.begin());
 	}
+
+	if(!splitTs.empty() && splitTs.at(splitTs.size() - 1) == 1){
+		splitTs.pop_back();
+	}
+
 	vector<double> ts;
 	ts.insert(ts.end(), splitTs.begin(), splitTs.end());
 	ts.push_back(0.0);
@@ -174,10 +175,10 @@ vector<FlaggedSegment> get_segments_split_at_critical_points(Path path, bool min
 
 		newPathSegments.insert(newPathSegments.end(), splitSegments.begin(), splitSegments.end());
 		/*
-		   if(path.getCurve(i).is_straight() & splitSegments.size()>=2) {
-		   System.out.println(firstSeg + " ... " + lastSeg);
-		   }
-		   */
+		if(path.getCurve(i).is_straight() & splitSegments.size()>=2) {
+			System.out.println(firstSeg + " ... " + lastSeg);
+		}
+		*/
 	}
 	return newPathSegments;
 }
@@ -190,13 +191,13 @@ vector<Path> merge_flagged_segments(vector<FlaggedSegment> segments) {
 		FlaggedSegment segment = segments.at(i);
 		//System.out.println("flag " + i + " : " + segment);
 		/*
-		   if(1+1==2) {
-		   newPath.add_segment(segment.clone());
-		   newPaths.add(newPath.clone());
-		   newPath.clear();
-		   newPath.add_segment(segment.clone());
-		   continue;
-		   }*/
+		if(1+1==2) {
+		newPath.add_segment(segment.clone());
+		newPaths.add(newPath.clone());
+		newPath.clear();
+		newPath.add_segment(segment.clone());
+		continue;
+		}*/
 		if(i==0) {
 			newPath.clear();
 			newPath.add_segment(segment);
@@ -230,11 +231,14 @@ vector<Path> merge_flagged_segments(vector<FlaggedSegment> segments) {
 }
 
 vector<Path> split_by_monotonicity(Path path, bool min_max, bool inflection, bool straight_line_ends) {
+	//cout << path;
 	//cout << "path size: " << path.get_num_segments() << endl;
 	vector<FlaggedSegment> unsplitPathSegments = get_segments_split_at_critical_points(path, min_max, inflection, straight_line_ends);
+	cout << unsplitPathSegments;
 	//cout << "before: " << unsplitPathSegments.size() << endl;
 	vector<Path> splitPaths = merge_flagged_segments(unsplitPathSegments);
 	//cout << "after: " << splitPaths.size() << endl;
+	//cout << splitPaths;
 	return splitPaths;
 }
 

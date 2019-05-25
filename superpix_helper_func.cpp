@@ -12,6 +12,8 @@
 #include "shifter.h"
 #include "polygonalizer.h"
 
+#include "approximator.h"
+
 using namespace std;
 
 //Converts points to pixels (with alpha value)
@@ -88,7 +90,15 @@ vector<my_point> convert_path_to_pixels(vector<my_point> corners){
 }
 
 vector<my_point> get_pixelated_path_wrt_center(Path path, bool shifted, bool sorted, my_point center){
+	//TODO this spltting deforms the non poly lines too much.
 	vector<Path> step1 = split_by_monotonicity(path);
+
+	//vector<my_point> pixels_trans;
+	//for (auto sub_path : step1 ) {
+	//	vector<my_point> points = get_sample_points(sub_path, 100);
+	//	pixels_trans.insert(pixels_trans.end(), points.begin(), points.end());
+	//}
+	//return pixels_trans;
 
 	if (step1.empty()) {
 		cout << "Step1 empty\n";
@@ -100,6 +110,7 @@ vector<my_point> get_pixelated_path_wrt_center(Path path, bool shifted, bool sor
 		cout << "Step2 empty\n";
 	}
 
+	//TODO non poly lines gets mangeled here... why?
 	vector<my_point> step3 = get_pixelated_path_WRT_center(step2, sorted, center);
 
 	if (step3.empty()) {
@@ -197,7 +208,7 @@ vector<my_point> superpix_helper_func(Path path){
 	vector<my_point> pixel_pos = convert_path_to_pixels(pixelated_path);
 
 	//Convert doubles to ints (might be superfluous, look into this)
-	vector<my_point> pixels = points_to_pixels(pixel_pos);
+	//vector<my_point> pixels = points_to_pixels(pixel_pos);
 
-	return pixels;
+	return pixel_pos;
 }
