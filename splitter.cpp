@@ -141,8 +141,8 @@ vector<FlaggedSegment> get_segments_split_at_critical_points(Path path, bool min
 		// flags indicating whether a segment is at a split point
 		vector<FlaggedSegment> splitSegments = split_curve_by_monotonicity(path.get_curve(i), minMax, inflection);
 		size_t n = splitSegments.size();
-		FlaggedSegment firstSeg = splitSegments.at(0);
-		FlaggedSegment lastSeg = splitSegments.at(n-1);
+		FlaggedSegment *firstSeg = &splitSegments.at(0);
+		FlaggedSegment *lastSeg = &splitSegments.at(n-1);
 		//bool firstFlag = getSegmentFlag(path, i);
 		//System.out.println(path.getCurve(i).is_straight() + ", " + path.getCurve(i+1).is_straight());
 		bool firstFlag = getSegmentFlag(path, i);// || i==0 || MyMath.xor(path.getCurve(i-1).is_straight(), path.getCurve(i).is_straight());
@@ -159,15 +159,16 @@ vector<FlaggedSegment> get_segments_split_at_critical_points(Path path, bool min
 				lastFlag = true;
 			}
 		}
-		firstSeg.set_flag(firstFlag);
-		lastSeg.set_flag(lastFlag);
+
+		firstSeg->set_flag(firstFlag);
+		lastSeg->set_flag(lastFlag);
 		if(!newPathSegments.empty()) {
-			FlaggedSegment lastSegAdded = newPathSegments.at(newPathSegments.size()-1);
-			firstSeg.set_handle_in(lastSegAdded.get_handle_in());
+			FlaggedSegment *lastSegAdded = &newPathSegments.at(newPathSegments.size()-1);
+			firstSeg->set_handle_in(lastSegAdded->get_handle_in());
 
 			if(straightLineEnds && path.get_curve(i).is_straight()) {
-				firstSeg.set_flag(true);
-				lastSegAdded.set_flag(true);
+				firstSeg->set_flag(true);
+				lastSegAdded->set_flag(true);
 			}
 
 			newPathSegments.pop_back();
@@ -234,7 +235,7 @@ vector<Path> split_by_monotonicity(Path path, bool min_max, bool inflection, boo
 	//cout << path;
 	//cout << "path size: " << path.get_num_segments() << endl;
 	vector<FlaggedSegment> unsplitPathSegments = get_segments_split_at_critical_points(path, min_max, inflection, straight_line_ends);
-	cout << unsplitPathSegments;
+	//cout << unsplitPathSegments;
 	//cout << "before: " << unsplitPathSegments.size() << endl;
 	vector<Path> splitPaths = merge_flagged_segments(unsplitPathSegments);
 	//cout << "after: " << splitPaths.size() << endl;
