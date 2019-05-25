@@ -3,7 +3,6 @@
 #include <cassert>
 #include <vector>
 #include <math.h>
-#include <algorithm>
 
 #include <iostream>
 
@@ -106,7 +105,7 @@ vector<my_point> convert_pixel_centres_to_corner_path(vector<my_point> centres) 
 }
 
 
-bool is_extra_pixel(vector<my_point> points, int i) {
+bool is_extra_pixel(vector<my_point> points, size_t i) {
 	if( i <= 0 || i >= points.size()-1){
 		return false;
 	} else {
@@ -334,7 +333,7 @@ bool first_point_closer_to_centre_than_last_point(Path path, my_point centre) {
 
 vector<my_point> get_pixelated_path_WRT_center(Path path, bool toSort, my_point centre) {
 	toSort = true;
-	bool toSmooth = false;
+
 	vector<my_point> pixelPath;
 	bool reverse = !first_point_closer_to_centre_than_last_point(path, centre);
 	pixelPath = plot_unsorted_path_WRT_center(reverse ? path.get_reverse_path() : path, centre);
@@ -369,7 +368,7 @@ vector<my_point> get_pixelated_path_WRT_center(vector<Path> paths, bool sorted, 
 			Path path = paths.at(i);
 			// if length 0, don't do anything
 			if(path.get_first_point() == path.get_last_point()){
-				cout << "Got lenght 0 in polygonalizer\n";
+				//cout << "Got lenght 0 in polygonalizer\n";
 				continue;
 			}
 			//cout << i << endl;

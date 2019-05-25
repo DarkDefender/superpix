@@ -59,7 +59,7 @@ double get_span_error(my_point corner1, my_point corner2, vector<my_point> sampl
 	return error;
 }
 
-my_point get_slope_from_samples(int i, vector<my_point> samples) {
+my_point get_slope_from_samples(size_t i, vector<my_point> samples) {
 	assert(samples.size() >= 3);
 	if (i == 0){
 		return samples.at(1) - samples.at(0);
@@ -115,7 +115,7 @@ double get_max_span_one_length(vector<my_point> points) {
 }
 
 // fraction of segments that are out of place, in terms of slope order
-double get_ordering_cost_WRT_segment(vector<my_point> points, int k, int sortDir) {
+double get_ordering_cost_WRT_segment(vector<my_point> points, size_t k, int sortDir) {
 	vector<my_point> vectors;
 	for(size_t i=1; i < points.size(); i++) {
 		vectors.push_back(points.at(i) - points.at(i-1));
@@ -273,9 +273,9 @@ bool try_splitting_point(vector<my_point> points, int i, int dx, int dy,
 }
 
 // merge i and i+1
-bool try_merging_points(vector<my_point> points, int i, int dx, int dy,
+bool try_merging_points(vector<my_point> points, size_t i, int dx, int dy,
 		vector<my_point> samples, int sortDir) {
-	if ( i-1 >= 0 && i+2 >= points.size()){
+	if (i+2 >= points.size()){
 		return false;
 	}
 	my_point p1 = points.at(i-1);

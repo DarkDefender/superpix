@@ -1,7 +1,6 @@
 #include "path.h"
 
 #include <math.h>
-#include <algorithm>
 #include <cassert>
 #include <iomanip>
 
@@ -47,14 +46,16 @@ size_t Path::get_num_curves() const{
 }
 
 Path Path::get_reverse_path(){
-	vector<Segment> rev_vec = segments;
-	reverse(rev_vec.begin(), rev_vec.end());
+	vector<Segment> rev_vec;
+	for (int i = segments.size()-1; i >= 0; i--) {
+		rev_vec.push_back( segments.at(i).get_reverse_segment() );
+	}
 	return Path{rev_vec};
 }
 
-Curve Path::get_curve(int i) const{
+Curve Path::get_curve(size_t i) const{
 	// Is the curve index valid?
-	assert(i >= 0 && i < get_num_curves());
+	assert(i < get_num_curves());
 
 	my_point p0 = segments.at(i).get_point();
 	my_point p1 = p0 + segments.at(i).get_handle_out();
@@ -66,11 +67,11 @@ Curve Path::get_curve(int i) const{
 	return Curve{p0,p1,p2,p3};
 }
 
-bool Path::is_valid_seg_idx(int i){
+bool Path::is_valid_seg_idx(size_t i){
 	return (i==0 && !is_closed());
 }
 
-Curve Path::get_curve_before_seg_idx(int i){
+Curve Path::get_curve_before_seg_idx(size_t i){
 	if (is_valid_seg_idx(i)){
 		//TODO see if we have to fix up other stuff now that we do not return null
 		//return null;
@@ -81,7 +82,7 @@ Curve Path::get_curve_before_seg_idx(int i){
 	return curveBefore;
 }
 
-Curve Path::get_curve_after_seg_idx(int i){
+Curve Path::get_curve_after_seg_idx(size_t i){
 	if(is_valid_seg_idx(i)){
 		//TODO see if we have to fix up other stuff now that we do not return null
 		//return null;
@@ -100,7 +101,7 @@ vector<Curve> Path::get_curves() const{
 	return myCurves;
 }
 
-Segment Path::get_segment(int i) const{
+Segment Path::get_segment(size_t i) const{
 	return segments.at(i);
 }
 
@@ -120,7 +121,7 @@ my_point Path::get_last_point(){
 	return segments.back().get_point();
 }
 
-my_point Path::get_tangent_in_at_segment_index(int i){
+my_point Path::get_tangent_in_at_segment_index(size_t i){
 		if(!is_valid_seg_idx(i)){
 			return my_point{0,0};
 		}
@@ -136,7 +137,7 @@ my_point Path::get_tangent_in_at_segment_index(int i){
 		return v0;
 }
 
-my_point Path::get_tangent_out_at_segment_index(int i){
+my_point Path::get_tangent_out_at_segment_index(size_t i){
 		if(!is_valid_seg_idx(i)){
 			return my_point{0,0};
 		}
@@ -152,9 +153,9 @@ my_point Path::get_tangent_out_at_segment_index(int i){
 		return v3;
 }
 
-void Path::set(int i, Segment newSegment) {
+void Path::set(size_t i, Segment newSegment) {
 	if(is_closed()) {
-		int n = get_num_segments()-1;
+		size_t n = get_num_segments()-1;
 		if(i==0 || i==n) {
 			segments[0] = newSegment;
 			segments[n] = newSegment;
@@ -198,9 +199,9 @@ vector<my_point> Path::get_bounding_box() {
 	}
 }
 
-bool Path::is_acute_angle(int i) {
-	int n = get_num_segments();
-	assert(0 <= i && i < n);
+bool Path::is_acute_angle(size_t i) {
+	size_t n = get_num_segments();
+	assert(i < n);
 	if((i==0 || i==n-1) && !is_closed()){
 		return false;
 	} else {
@@ -237,9 +238,9 @@ bool Path::is_straight() {
 }
 
 // assumes no degenerate curves in the path
-bool Path::is_nondifferentiable_at_segment_index(int i) {
+bool Path::is_nondifferentiable_at_segment_index(size_t i) {
 	//Valid segment index?
-	assert(i >= 0 && i< segments.size());
+	assert(i < segments.size());
 	if(!is_closed() && (i==0 || i==segments.size()-1)){
 		return true;
 	} else {
@@ -266,12 +267,12 @@ void Path::add_curve(Curve c){
 	add_segment( Segment{c.get_pN(3), c.get_handle2(), c.get_handle2()*(-1)} );
 }
 
-void Path::remove_segment(int i) {
+void Path::remove_segment(size_t i) {
 	//Valid segment index?
-	assert(i >= 0 && i< segments.size());
+	assert(i < segments.size());
 	auto it = segments.begin();
 	if(is_closed()) {
-		int n = get_num_segments()-1;
+		size_t n = get_num_segments()-1;
 		if(i==0 || i==n) {
 			segments.erase(it+n);
 			segments.erase(it+0);

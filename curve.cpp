@@ -225,7 +225,7 @@ bool Curve::is_min_at0(char dir) {
 	double v1 = (dir == 'x') ? get_pN(1).x : get_pN(1).y;
 	double v2 = (dir == 'x') ? get_pN(2).x : get_pN(2).y;
 	double v3 = (dir == 'x') ? get_pN(3).x : get_pN(3).y;
-	bool isMin = v0-v1 <= tol && v0-v2 <= tol & v0-v3 <= tol;
+	bool isMin = v0-v1 <= tol && v0-v2 <= tol && v0-v3 <= tol;
 	return isMin;
 }
 
@@ -235,7 +235,7 @@ bool Curve::is_min_at1(char dir) {
 	double v1 = (dir == 'x') ? get_pN(1).x : get_pN(1).y;
 	double v2 = (dir == 'x') ? get_pN(2).x : get_pN(2).y;
 	double v3 = (dir == 'x') ? get_pN(3).x : get_pN(3).y;
-	bool isMin = v3-v0 <= tol && v3-v1 <= tol & v3-v2 <= tol;
+	bool isMin = v3-v0 <= tol && v3-v1 <= tol && v3-v2 <= tol;
 	return isMin;
 }
 
@@ -245,7 +245,7 @@ bool Curve::is_max_at0(char dir) {
 	double v1 = (dir == 'x') ? get_pN(1).x : get_pN(1).y;
 	double v2 = (dir == 'x') ? get_pN(2).x : get_pN(2).y;
 	double v3 = (dir == 'x') ? get_pN(3).x : get_pN(3).y;
-	bool isMax = v0-v1 >= -tol && v0-v2 >= -tol & v0-v3 >= -tol;
+	bool isMax = v0-v1 >= -tol && v0-v2 >= -tol && v0-v3 >= -tol;
 	return isMax;
 }
 
@@ -255,7 +255,7 @@ bool Curve::is_max_at1(char dir) {
 	double v1 = (dir == 'x') ? get_pN(1).x : get_pN(1).y;
 	double v2 = (dir == 'x') ? get_pN(2).x : get_pN(2).y;
 	double v3 = (dir == 'x') ? get_pN(3).x : get_pN(3).y;
-	bool isMax = v3-v0 >= -tol && v3-v1 >= -tol & v3-v2 >= -tol;
+	bool isMax = v3-v0 >= -tol && v3-v1 >= -tol && v3-v2 >= -tol;
 	return isMax;
 }
 

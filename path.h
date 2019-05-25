@@ -16,7 +16,7 @@ class Path {
 		//Not sure if this is used
 		int winding_rule;
 
-		bool is_valid_seg_idx(int i);
+		bool is_valid_seg_idx(size_t i);
 
 	public:
 		Path();
@@ -36,34 +36,34 @@ class Path {
 
 		Path get_reverse_path();
 
-		Curve get_curve(int i) const;
-		Curve get_curve_before_seg_idx(int i);
-		Curve get_curve_after_seg_idx(int i);
+		Curve get_curve(size_t i) const;
+		Curve get_curve_before_seg_idx(size_t i);
+		Curve get_curve_after_seg_idx(size_t i);
 		vector<Curve> get_curves() const;
 
-		Segment get_segment(int i) const;
+		Segment get_segment(size_t i) const;
 		Segment get_first_segment();
 		Segment get_last_segment();
 
 		my_point get_first_point();
 		my_point get_last_point();
-        my_point get_tangent_in_at_segment_index(int i);
-        my_point get_tangent_out_at_segment_index(int i);
+		my_point get_tangent_in_at_segment_index(size_t i);
+		my_point get_tangent_out_at_segment_index(size_t i);
 
-		void set(int i, Segment new_seg);
+		void set(size_t i, Segment new_seg);
 		void set_last_segment(Segment seg);
 
 		vector<my_point> get_bounding_box();
 
-		bool is_acute_angle(int i);
+		bool is_acute_angle(size_t i);
 		bool is_closed();
 		bool is_straight();
-		bool is_nondifferentiable_at_segment_index(int i);
+		bool is_nondifferentiable_at_segment_index(size_t i);
 
 		void add_segment(Segment seg);
 		void add_curve(Curve curve);
 
-		void remove_segment(int i);
+		void remove_segment(size_t i);
 };
 
 ostream& operator <<(ostream &o, const Path &p);

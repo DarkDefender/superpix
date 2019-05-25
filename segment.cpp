@@ -67,6 +67,10 @@ my_point transform_vector(my_point p, Transform<double,2,Affine> at) {
 	return my_point{v2[0], v2[1]};
 }
 
+Segment Segment::get_reverse_segment() {
+	return Segment{point, handle_out, handle_in};
+}
+
 void Segment::transform(Transform<double,2,Affine> at){
 	point = transform_point(point, at);
 	handle_in =	transform_vector(handle_in, at);

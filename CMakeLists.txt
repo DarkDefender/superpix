@@ -1,6 +1,17 @@
 cmake_minimum_required (VERSION 2.6)
 project (super_pix)
 
+if(MSVC)
+    add_compile_options("/W4" "$<$<CONFIG:RELEASE>:/O2>")
+else()
+    add_compile_options("-Wall" "-Wextra" "$<$<CONFIG:RELEASE>:-O3>")
+    if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
+        add_compile_options("-stdlib=libc++")
+    else()
+        # nothing special for gcc at the moment
+    endif()
+endif()
+
 #For writing png files as output
 find_package(PNG REQUIRED)
 

@@ -29,7 +29,7 @@ typedef struct  {
 /* Given "bitmap", this returns the pixel of bitmap at the point
    ("x", "y"). */
 
-static pixel_t* pixel_at(bitmap_t *bitmap, int x, int y)
+static pixel_t* pixel_at(bitmap_t *bitmap, size_t x, size_t y)
 {
 	if (bitmap->width < y || bitmap->height < x) {
 		//Out of bounds
@@ -130,18 +130,6 @@ png_create_write_struct_failed:
 	fclose(fp);
 fopen_failed:
 	return status;
-}
-
-/* Given "value" and "max", the maximum value which we expect "value"
-   to take, this returns an integer between 0 and 255 proportional to
-   "value" divided by "max". */
-
-static int pix(int value, int max)
-{
-	if (value < 0) {
-		return 0;
-	}
-	return (int) (256.0 *((double) (value)/(double) max));
 }
 
 int test_png(const char *png_file, vector<vector<my_point>> point_vec, int w, int h)

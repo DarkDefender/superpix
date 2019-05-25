@@ -29,6 +29,8 @@ class Segment {
 		void set_handle_in(my_point p);
 		void set_handle_out(my_point p);
 
+		Segment get_reverse_segment();
+
 		void transform(Transform<double,2,Affine> at);
 };
 
