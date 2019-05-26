@@ -12,6 +12,13 @@ int sgn(double val) {
 	return (val < 0) ? -1 : (val == 0) ? 0 : 1;
 }
 
+int round_up(double val){
+	if(fmod(val,1) < 0.5){
+		return (int) floor(val);
+	}
+	return (int) ceil(val);
+}
+
 int round_down(double val){
 	if(fmod(val,1) <= 0.5){
 		return (int) floor(val);
@@ -27,9 +34,10 @@ my_point get_closest_pixel_center_WRT_center(my_point p, my_point centre) {
 	double dirX = sgn(p.x - centre.x);
 	double dirY = sgn(p.y - centre.y);
 	double newX = (dirX > 0) ? (round_down(p.x-0.5)+0.5)
-		: (round(p.x+0.5)-0.5);
+		: (round_up(p.x+0.5)-0.5);
 	double newY = (dirY > 0) ? (round_down(p.y-0.5)+0.5)
-		: (round(p.y+0.5)-0.5);
+		: (round_up(p.y+0.5)-0.5);
+
 	return my_point{newX, newY};
 }
 
@@ -72,6 +80,7 @@ void shift_endpoints_to_pixel_centres_WRT_center(Path &path, bool shift_handles,
 	}
 	my_point oldP1 = path.get_segment(0).get_point();
 	my_point newP1 = get_closest_pixel_center_WRT_center(oldP1, center);
+
 	if(abs(oldP1.x-center.x) < 0.01){
 		newP1.x = center.x;
 	}

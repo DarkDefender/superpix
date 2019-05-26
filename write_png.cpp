@@ -145,7 +145,7 @@ int test_png(const char *png_file, vector<vector<my_point>> point_vec, int w, in
 
 	image.pixels = (pixel_t*) calloc(image.width * image.height, sizeof(pixel_t));
 
-	if (! image.pixels) {
+	if (!image.pixels) {
 		return -1;
 	}
 
